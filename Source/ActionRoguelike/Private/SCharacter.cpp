@@ -3,6 +3,7 @@
 
 #include "SCharacter.h"
 
+#include "SInteractionComponent.h"
 #include "Camera/CameraComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/SpringArmComponent.h"
@@ -19,6 +20,8 @@ ASCharacter::ASCharacter()
 
 	CameraComp = CreateDefaultSubobject<UCameraComponent>("CameraComp");
 	CameraComp->SetupAttachment(SpringArmComp);
+
+	InteractionComp = CreateDefaultSubobject<USInteractionComponent>(TEXT("InteractionComp"));
 
 	GetCharacterMovement()->bOrientRotationToMovement = true;
 
@@ -62,6 +65,11 @@ void ASCharacter::PrimaryAttack()
 	GetWorld()->SpawnActor<AActor>(ProjectileClass, SpawnTM, SpawnParams);
 }
 
+void ASCharacter::PrimaryInteract()
+{
+	InteractionComp->PrimaryInteract();
+}
+
 // Called every frame
 void ASCharacter::Tick(float DeltaTime)
 {
@@ -97,6 +105,7 @@ void ASCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponen
 
 	PlayerInputComponent->BindAction("PrimaryAttack", IE_Pressed, this,
 	&ASCharacter::PrimaryAttack);
+	PlayerInputComponent->BindAction("PrimaryInteract", IE_Pressed, this, &ASCharacter::PrimaryInteract);
 	PlayerInputComponent->BindAction("Jump", IE_Pressed, this,
 	&ASCharacter::Jump);
 }
