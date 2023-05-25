@@ -18,11 +18,17 @@ AExplosiveBarrel::AExplosiveBarrel()
 	RadialForceComp->SetupAttachment(StaticMeshComp);
 }
 
+void AExplosiveBarrel::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
+{
+	RadialForceComp->FireImpulse();
+}
+
 // Called when the game starts or when spawned
 void AExplosiveBarrel::BeginPlay()
 {
 	Super::BeginPlay();
-	
+
+	StaticMeshComp->OnComponentHit.AddDynamic(this, &AExplosiveBarrel::OnHit);
 }
 
 // Called every frame
