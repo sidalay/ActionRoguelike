@@ -3,6 +3,7 @@
 
 #include "SCharacter.h"
 
+#include "SAttributeComponent.h"
 #include "SInteractionComponent.h"
 #include "Camera/CameraComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
@@ -22,6 +23,7 @@ ASCharacter::ASCharacter()
 	CameraComp->SetupAttachment(SpringArmComp);
 
 	InteractionComp = CreateDefaultSubobject<USInteractionComponent>(TEXT("InteractionComp"));
+	AttributeComp = CreateDefaultSubobject<USAttributeComponent>(TEXT("AttributeComp"));
 
 	GetCharacterMovement()->bOrientRotationToMovement = true;
 
@@ -68,6 +70,13 @@ void ASCharacter::PrimaryAttack()
 void ASCharacter::PrimaryAttack_TimeElapsed()
 {
 	FVector HandLocation{GetMesh()->GetSocketLocation("Muzzle_01")};
+	// FRotator HandRotation{GetActorRotation()};
+	// float TravelDistance{1000.f};
+	// FVector End{HandLocation + (HandRotation.Vector() * TravelDistance)};
+	//
+	// DrawDebugLine(GetWorld(), HandLocation, End, FColor::Purple, false, 3.f, 0, 2.f);
+	//
+	// FRotator ProjectileRotation{HandLocation.Rotation() - End.Rotation()};
 
 	FTransform SpawnTM{FTransform(GetControlRotation(), HandLocation)};
 
@@ -89,20 +98,20 @@ void ASCharacter::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 
 	// -- Rotation Visualization -- //
-	const float DrawScale = 100.0f;
-	const float Thickness = 5.0f;
+	// const float DrawScale = 100.0f;
+	// const float Thickness = 5.0f;
 
-	FVector LineStart = GetActorLocation();
+	// FVector LineStart = GetActorLocation();
 	// Offset to the right of pawn
-	LineStart += GetActorRightVector() * 100.0f;
+	// LineStart += GetActorRightVector() * 100.0f;
 	// Set line end in direction of the actor's forward
-	FVector ActorDirection_LineEnd = LineStart + (GetActorForwardVector() * 100.0f);
+	// FVector ActorDirection_LineEnd = LineStart + (GetActorForwardVector() * 100.0f);
 	// Draw Actor's Direction
-	DrawDebugDirectionalArrow(GetWorld(), LineStart, ActorDirection_LineEnd, DrawScale, FColor::Yellow, false, 0.0f, 0, Thickness);
+	// DrawDebugDirectionalArrow(GetWorld(), LineStart, ActorDirection_LineEnd, DrawScale, FColor::Yellow, false, 0.0f, 0, Thickness);
 
-	FVector ControllerDirection_LineEnd = LineStart + (GetControlRotation().Vector() * 100.0f);
+	// FVector ControllerDirection_LineEnd = LineStart + (GetControlRotation().Vector() * 100.0f);
 	// Draw 'Controller' Rotation ('PlayerController' that 'possessed' this character)
-	DrawDebugDirectionalArrow(GetWorld(), LineStart, ControllerDirection_LineEnd, DrawScale, FColor::Green, false, 0.0f, 0, Thickness);
+	// DrawDebugDirectionalArrow(GetWorld(), LineStart, ControllerDirection_LineEnd, DrawScale, FColor::Green, false, 0.0f, 0, Thickness);
 }
 
 // Called to bind functionality to input
